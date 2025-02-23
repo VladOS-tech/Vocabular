@@ -7,12 +7,12 @@ use App\Models\Context;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
-class PhraseologyController extends Controller
+class PublicPhraseologyController extends Controller
 {
 
     public function index()
     {
-        $phraseologies = Phraseology::all();
+        $phraseologies = Phraseology::where('status', 'confirmed')->get();
         $tags = Tag::all();
 
         return view('main', compact('phraseologies', 'tags'));
@@ -21,7 +21,7 @@ class PhraseologyController extends Controller
     // Просмотр конкретного фразеологизма
     public function show($id)
     {
-        $phraseology = Phraseology::findOrFail($id);
+        $phraseology = Phraseology::where('id', $id)->where('status', 'confirmed')->firstOrFail();
         return response()->json($phraseology);
     }
 
@@ -53,7 +53,7 @@ class PhraseologyController extends Controller
         }
         
         return response()->json([
-            'message' => 'Фразеологизм добавлен!',
+            'message' => 'Фразеологизм отправлен на проверку!',
         ]);
     }
 

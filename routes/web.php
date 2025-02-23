@@ -3,7 +3,10 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\PhraseologyController;
+use App\Http\Controllers\PublicPhraseologyController;
+use App\Http\Controllers\ModeratorPhraseologyController;
+use App\Http\Controllers\AdminModeratorController;
+
 use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\ContextController;
 
@@ -28,12 +31,43 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    // Фразеологизмы
-    Route::resource('phraseologies', PhraseologyController::class)->only([
-        'index', 'show', 'store', 'update', 'destroy',
-    ]);
-    
-    
+
+
+    // Публичные маршруты (доступны всем пользователям)
+    Route::get('/phraseologies', [PublicPhraseologyController::class, 'index']); // Список фразеологизмов
+    Route::get('/phraseologies/search', [PublicPhraseologyController::class, 'search']); // Поиск
+    Route::post('/phraseologies', [PublicPhraseologyController::class, 'store']); // Добавление нового фразеологизма
+
+
+    // Маршруты для модераторов (требуется аутентификация)
+Route::middleware(['auth:moderator'])->prefix('moderator')->group(function () {
+    Route::get('/phraseologies', [ModeratorPhraseologyController::class, 'index']); // Список на модерацию
+    Route::put('/phraseologies/{id}/approve', [ModeratorPhraseologyController::class, 'approve']); // Одобрить фразеологизм
+    Route::put('/phraseologies/{id}/reject', [ModeratorPhraseologyController::class, 'reject']); // Отклонить фразеологизм
+    Route::put('/phraseologies/{id}/tags', [ModeratorPhraseologyController::class, 'updateTags']); // Обновить теги
+});
+
+
+
+    // Маршруты для администраторов (требуется аутентификация)
+Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
+    // Управление модераторами
+    Route::get('/moderators', [AdminModeratorController::class, 'index']);
+    Route::post('/moderators', [AdminModeratorController::class, 'store']);
+    Route::put('/moderators/{id}', [AdminModeratorController::class, 'update']);
+    Route::delete('/moderators/{id}', [AdminModeratorController::class, 'destroy']);
+});
+    /*
+    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['role:moderator'])->group(function () {
+        Route::resource('moderator/phraseologies', ModeratorPhraseologyController::class);
+    });
+
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('admin/phraseologies', AdminPhraseologyController::class);
+    });
+});
+    */
     
 
 
@@ -51,10 +85,10 @@ Route::middleware([
         return view('main');
     });*/
     
-Route::get('/', [PhraseologyController::class, 'index']);
+// Route::get('/', [PhraseologyController::class, 'index']);
 
     
 
-Route::post('/phraseologies', [PhraseologyController::class, 'store'])->name('phraseologies.store');
+// Route::post('/phraseologies', [PhraseologyController::class, 'store'])->name('phraseologies.store');
 
 
