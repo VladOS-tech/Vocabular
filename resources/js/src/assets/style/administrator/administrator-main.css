@@ -1,0 +1,116 @@
+.admin-main-grid{
+    display: grid;
+    column-gap: 20px;
+    row-gap: 15px;
+    grid-template-areas: 'sort'
+                        'tabs' 
+                        'requests';
+    height: fit-content;
+}
+
+@media screen and (min-width: 769px) {
+    .admin-main-grid{
+        margin: 61px 9% 30px 9%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .admin-main-grid{
+        margin: 20px 1% 30px 1%;
+    }
+
+    .tabs-area{
+        justify-content: space-between;   
+    }
+}
+
+.sort-area{
+    grid-area: sort;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 100%;
+    gap: 10px;
+}
+
+.tabs-area{
+    grid-area: tabs;
+    max-width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    height: fit-content;
+}
+
+.request-area{
+    grid-area: requests;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    max-width: 100%;
+}
+
+.tab-button{
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    padding: 2px 5px;
+    white-space: nowrap;
+}
+
+.tabs-vertical-separator{
+    width: 2px;
+    height: 25px;
+    background-color: black;
+    align-self: center;
+}
+
+.tab-add-button{
+    background-color: var(--button-color);
+    box-shadow: var(--default-shadow);
+}
+
+.tab-style{
+    color: black;
+}
+
+.tab-selected{
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
+.tab-unselected{
+    text-decoration: none;
+}
+
+.search-block{
+    display: flex;
+    column-gap: 8px;
+    justify-content: center;
+    position: relative;
+}
+
+.admin-search-field-light{
+    background-color: #FFFFFF;
+}
+
+.admin-search-field{
+    border-radius: var(--default-border-radius);
+    border-style: solid;
+    box-shadow: var(--default-shadow);
+    height: 100%;
+    width: 100%;
+    min-width: 18.67px;
+    text-indent: 25.75px;
+    font-size: 18px;
+    padding: 6px 7px 6px 7px;
+    box-sizing: border-box;
+}
+
+.search-icon-header{
+    position: absolute;
+    left: 7px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18.75px;
+}

@@ -1,0 +1,45 @@
+.phrases-page-main-grid{
+    display: grid;
+    column-gap: 20px;
+    row-gap: 15px;
+}
+
+@media screen and (min-width: 769px) {
+    .phrases-page-main-grid{
+        margin: 61px 9% 30px 9%;
+        grid-template-columns: 2.4fr 1fr;
+        grid-template-areas: 'sort sort'
+                            'phrase-list sidebar';
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .phrases-page-main-grid{
+        margin: 20px 1% 30px 1%;
+        grid-template-areas: 'sidebar'
+                            'sort'
+                            'phrase-list';
+    }
+}
+
+.sort-area{
+    grid-area: sort;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.phrase-area{
+    grid-area: phrase-list;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.sidebar-area{
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}

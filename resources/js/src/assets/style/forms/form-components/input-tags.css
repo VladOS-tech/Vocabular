@@ -1,0 +1,62 @@
+.input-tags-block{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tag-input-wrapper{
+    background-color: var(--light-background-color);
+    border-radius: var(--default-border-radius);
+    box-shadow: var(--default-shadow);
+    border-style: none;
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+.tag-input-wrapper:hover{
+    cursor: text;
+}
+
+.tag-hidden-input{
+    font-size: 16px;
+    border-radius: var(--default-border-radius);
+    width: fit-content;
+    /* background-color: rebeccapurple; */
+    min-width: 2px;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tag-hidden-input:empty::before{
+    content: 'Запишите теги через запятую...';
+    transform: translateY(-2px);
+    color: #555;
+}
+
+.tag-hidden-input:empty{
+    padding-top: 5px;
+}
+
+.tag-hidden-input:focus{
+    outline-style: none;
+}
+
+.tag-editable{
+    gap: 10px;
+}
+
+.remove-tag-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2.2px;
+    background-color: #FF7878;
+}

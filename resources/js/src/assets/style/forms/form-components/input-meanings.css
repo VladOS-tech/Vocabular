@@ -1,0 +1,56 @@
+.input-meanings-block{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.input-meaning-block-content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.input-meaning-block{
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    background-color: var(--light-meaning-block-color);
+    padding: 10px;
+    display: flex;
+    border-radius: var(--default-border-radius);
+}
+
+.delete-button{
+    background-color: #FF3D3D;
+}
+
+.delete-button img{
+    width: 25px;
+    height: auto;
+}
+
+.add-meaning-button{
+    background-color: var(--button-color);
+    width: fit-content;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.confirm-meaning-button{
+    background-color: #7FED7C;
+}
+
+.cancel-meaning-button{
+    background-color: #bfbfbf;
+}
+
+.buttons-block{
+    display: flex;
+    align-self: flex-start;
+    gap: 10px;
+}
