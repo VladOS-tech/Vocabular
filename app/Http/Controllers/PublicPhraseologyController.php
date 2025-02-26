@@ -6,16 +6,33 @@ use App\Models\Phraseology;
 use App\Models\Context;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PublicPhraseologyController extends Controller
 {
 
     public function index()
     {
-        $phraseologies = Phraseology::where('status', 'confirmed')->get();
-        $tags = Tag::all();
+        $phraseologies = Phraseology::where('status', 'pending')
+        ->with('tags') // Загружаем теги
+        ->get()
+        ->map(function ($phraseology) {
+            return [
+                'id' => $phraseology->id,
+                'date' => $phraseology->confirmed_at ?? $phraseology->updated_at, // Используем дату подтверждения или последнего обновления
+                'phrase' => $phraseology->content,
+                'tags' => $phraseology->tags->map(fn($tag) => ['id' => $tag->id, 'name' => $tag->name]),
+                'meanings' => [
+                    [
+                        'meaning' => $phraseology->meaning,
+                        'example' => null // Если есть примеры, их тоже надо загружать
+                    ]
+                ]
+            ];
+        });
 
-        return view('main', compact('phraseologies', 'tags'));
+        return response()->json($phraseologies); 
     }
     
     // Просмотр конкретного фразеологизма

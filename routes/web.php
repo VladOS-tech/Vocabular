@@ -11,14 +11,17 @@ use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\ContextController;
 
 // Главная страница
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
+Route::get('/', [PublicPhraseologyController::class, 'index'])->name('phraseologies.index');
+
 
 // Авторизация и доступ к панели управления
 Route::middleware([

@@ -10,6 +10,8 @@ import MeaningObject from "@/assets/interfaces/MeaningObject";
 import ExamplePhrases from '@/assets/JSObjects/ExamplePhrases.json'
 import ExampleTags from '@/assets/JSObjects/ExampleTags.json'
 import router from "@/router";
+import axios from 'axios';
+
 
 interface State {
     isMobile: boolean;
@@ -126,12 +128,16 @@ const actions = {
         commit('setLoading', { whichLoading: 'tags', newLoading: false })
     },
     async GetPhrasesInfo({commit}: {commit: any}) {
-        commit('setLoading', { whichLoading: 'phrases', newLoading: true })
-        commit('setPhraseList', ExamplePhrases)
-        await new Promise(resolve => {
-            setTimeout(resolve, 2000)
-        })
-        commit('setLoading', { whichLoading: 'phrases', newLoading: false })
+        commit('setLoading', { whichLoading: 'phrases', newLoading: true });
+
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/api/phraseologies'); // Укажи правильный URL бэкенда
+            commit('setPhraseList', response.data);
+        } catch (error) {
+            console.error('Ошибка при загрузке фразеологизмов:', error);
+        }
+    
+        commit('setLoading', { whichLoading: 'phrases', newLoading: false });
     },
     async CheckPhraseInput({ state, commit }: { state: State, commit: any }) {
         let valid = true
