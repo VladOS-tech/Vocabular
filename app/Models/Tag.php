@@ -11,7 +11,6 @@ class Tag extends Model
 
     protected $table = 'tags';
     
-    // Запрещаем массовое назначение для поля name
     protected $fillable = ['content'];
 
     // Связь многие ко многим с фразеологизмами

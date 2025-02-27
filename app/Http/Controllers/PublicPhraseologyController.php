@@ -15,25 +15,33 @@ class PublicPhraseologyController extends Controller
     public function index()
     {
         $phraseologies = Phraseology::where('status', 'pending')
-        ->with('tags') // Загружаем теги
-        ->get()
-        ->map(function ($phraseology) {
-            return [
-                'id' => $phraseology->id,
-                'date' => $phraseology->confirmed_at ?? $phraseology->updated_at, // Используем дату подтверждения или последнего обновления
-                'phrase' => $phraseology->content,
-                'tags' => $phraseology->tags->map(fn($tag) => ['id' => $tag->id, 'name' => $tag->name]),
-                'meanings' => [
-                    [
-                        'meaning' => $phraseology->meaning,
-                        'example' => null // Если есть примеры, их тоже надо загружать
-                    ]
-                ]
-            ];
-        });
+            ->with('tags', 'contexts') // Загружаем теги и контексты
+            ->get()
+            ->map(function ($phraseology) {
+                return [
+                    'id' => $phraseology->id,
+                    'date' => $phraseology->confirmed_at ?? $phraseology->updated_at,
+                    'phrase' => $phraseology->content,
+                    'tags' => $phraseology->tags->map(fn($tag) => [
+                        'id' => $tag->id,
+                        'content' => $tag->content
+                    ]),
+                    'meanings' => [
+                        [
+                            'meaning' => $phraseology->meaning,
+                            'example' => $phraseology->contexts->pluck('content')->join('; ')
+                            ]
+                    ],
+                    'contexts' => $phraseology->contexts->map(fn($context) => [
+                        'id' => $context->id,
+                        'content' => $context->content
+                    ])
+                ];
+            });
 
-        return response()->json($phraseologies); 
+        return response()->json($phraseologies);
     }
+
     
     // Просмотр конкретного фразеологизма
     public function show($id)
