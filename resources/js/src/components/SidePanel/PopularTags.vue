@@ -6,7 +6,7 @@
         <!-- make togglable tags(and dispatch event) + hide this menu on mobile and load popular tags via action -->
         <loadingIcon v-if="isLoading.tags" />
         <div class="tags-block" v-else>
-            <div class="tag-button" :class="isSelected(tag.id) ? 'tag-selectable-active' : 'tag-selectable'" v-for="tag in Tags" :key="tag.id" ref="tag.id" @click="selectTag(tag.id)">{{ tag.name }}</div>
+            <div class="tag-button" :class="isSelected(tag.id) ? 'tag-selectable-active' : 'tag-selectable'" v-for="tag in Tags" :key="tag.id" ref="tag.id" @click="selectTag(tag.id)">{{ tag.content }}</div>
         </div>
         <div class="button button-large button-side" @click="GetPhrasesInfo()">
             Применить

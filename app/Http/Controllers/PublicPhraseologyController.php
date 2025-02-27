@@ -49,29 +49,33 @@ class PublicPhraseologyController extends Controller
             'content' => 'required|string|max:255',
             'meaning' => 'required|string',
             'context' => 'required|string',
-            'tags' => 'array', // Указываем, что теги должны быть массивом
-            'tags.*' => 'exists:tags,id' // Проверяем, что каждый тег существует
+            'tags' => 'array',
+            'tags.*' => 'exists:tags,id'
         ]);
 
-        // Создать фразеологизм с тегом "отправлен на проверку"
+        // Создание фразеологизма
         $phraseology = Phraseology::create([
             'content' => $validated['content'],
             'meaning' => $validated['meaning'],
             'status' => 'pending',
+            'created_at' => now(), // Добавляем дату создания
         ]);
-        
+
+        // Сохранение контекста
         Context::create([
             'phraseology_id' => $phraseology->id,
-            'content' => $request->context,
+            'content' => $validated['context'],
         ]);
-        
-        if ($request->has('tags')) {
-            $phraseology->tags()->attach($request->tags);
+
+        // Привязка тегов
+        if (!empty($validated['tags'])) {
+            $phraseology->tags()->attach($validated['tags']);
         }
-        
+
         return response()->json([
             'message' => 'Фразеологизм отправлен на проверку!',
-        ]);
+            'phraseology' => $phraseology->load('tags'), // Возвращаем с тегами
+        ], 201);
     }
 
 
