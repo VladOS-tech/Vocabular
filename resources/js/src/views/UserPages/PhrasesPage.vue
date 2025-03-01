@@ -10,7 +10,7 @@
         </div>
         <div class="sidebar-area">
             <helpBlock />
-            <popularTags :Tags="popularTags"/>
+            <SidebarTags/>
         </div>
     </div>
 </template>
@@ -19,7 +19,7 @@
 import sortingSelection from '@/components/Misc/SortingSelection.vue'
 import phraseBlock from '@/components/Blocks/PhraseBlock.vue';
 import helpBlock from '@/components/SidePanel/HelpBlock.vue';
-import popularTags from '@/components/SidePanel/PopularTags.vue';
+import SidebarTags from '@/components/SidePanel/SidebarTags.vue';
 import loadingIcon from '@/components/Misc/LoadingIcon.vue';
 import { defineComponent } from 'vue';
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex';
@@ -29,7 +29,7 @@ export default defineComponent({
         sortingSelection,
         phraseBlock,
         helpBlock,
-        popularTags,
+        SidebarTags,
         loadingIcon
     },
     data(){
@@ -38,7 +38,7 @@ export default defineComponent({
         }
     },
     computed:{
-        ...mapGetters(['isLoading', 'phrasesList', 'popularTags']),
+        ...mapGetters(['isLoading', 'phrasesList', 'SidebarTags']),
     },
     methods:{
         ...mapMutations(['setPageName']),

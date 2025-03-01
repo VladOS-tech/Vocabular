@@ -6,6 +6,7 @@ import TagObject from "@/assets/interfaces/TagObject"
 import LoadingObject from "@/assets/interfaces/LoadingObject"
 import MeaningObject from "@/assets/interfaces/MeaningObject"
 import router from "@/router"
+import exampleTags from "@/assets/JSObjects/ExampleTags.json"
 
 interface State {
     isMobile: boolean;
@@ -55,6 +56,9 @@ const mutations = {
     },
     setLoading(state: State, { whichLoading, newLoading }: { whichLoading: keyof LoadingObject, newLoading: boolean }) {
         state.isLoading[whichLoading] = newLoading
+    },
+    setPopularTags(state: State, tags :TagObject[]){
+        state.popularTags = tags;
     }
 }
 
@@ -65,14 +69,15 @@ const actions = {
 
     async GetPopularTags({ commit }: { commit: any }) {
         commit('setLoading', { whichLoading: 'tags', newLoading: true })
-        try {
-            const { data } = await axios.get('http://127.0.0.1:8000/api/tags')
-            commit('setState', { key: 'popularTags', value: data })
-        } catch (error) {
-            console.error('Ошибка при загрузке тегов:', error)
-        } finally {
+        // try {
+        //     const { data } = await axios.get('http://127.0.0.1:8000/api/tags')
+        //     commit('setState', { key: 'popularTags', value: data })
+        // } catch (error) {
+        //     console.error('Ошибка при загрузке тегов:', error)
+        // } finally {
+            commit('setPopularTags', {tags: exampleTags})
             commit('setLoading', { whichLoading: 'tags', newLoading: false })
-        }
+        // }
     },
 
     async GetPhrasesInfo({ commit }: { commit: any }) {
