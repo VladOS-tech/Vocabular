@@ -13,6 +13,7 @@ interface State {
     sortingOption: string;
     phrasesList: PhraseObject[] | null;
     popularTags: TagObject[] | null;
+    searchSelectedTags: TagObject[];
     isLoading: LoadingObject;
     inputTags: Set<string>;
     inputTagsError: string;
@@ -26,7 +27,8 @@ const state: State = {
     isMobile: false,
     sortingOption: '',
     phrasesList: null,
-    popularTags: null,
+    popularTags: [],
+    searchSelectedTags: [],
     isLoading: { phrases: true, tags: true, inputPhrase: true },
     inputTags: new Set(),
     inputTagsError: '',
@@ -41,6 +43,7 @@ const getters = {
     phrasesList: (state: State) => state.phrasesList,
     sortingOption: (state: State) => state.sortingOption,
     popularTags: (state: State) => state.popularTags,
+    searchSelectedTags: (state: State) => state.searchSelectedTags,
     isLoading: (state: State) => state.isLoading,
     inputTagsError: (state: State) => state.inputTagsError,
     inputMeaningsErrors: (state: State) => state.inputMeaningsErrors,
@@ -59,7 +62,16 @@ const mutations = {
     },
     setPopularTags(state: State, tags :TagObject[]){
         state.popularTags = tags;
-    }
+    },
+    setSearchSelectedTags(state: State, tags :TagObject[]){
+        state.searchSelectedTags = tags;
+    },
+    addSearchSelectedTag(state: State, tag :TagObject){
+        state.searchSelectedTags.push(tag);
+    },
+    removeSearchSelectedTag(state: State, tag :TagObject){
+        state.searchSelectedTags = state.searchSelectedTags.filter(selectedtag => selectedtag.id !== tag.id)
+    },
 }
 
 const actions = {

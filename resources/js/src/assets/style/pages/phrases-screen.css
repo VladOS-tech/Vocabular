@@ -38,8 +38,11 @@
 }
 
 .sidebar-area{
+    position: sticky;
+    top: 100px;
     grid-area: sidebar;
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+    height: fit-content;
 }

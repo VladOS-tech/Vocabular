@@ -1,6 +1,6 @@
 interface TagObject{
     id: number,
-    content: string,
+    name: string,
     timesused: number
 }
 
