@@ -14,6 +14,7 @@ interface State {
     phrasesList: PhraseObject[] | null;
     popularTags: TagObject[] | null;
     searchSelectedTags: TagObject[];
+    searchRecommendedTags: TagObject[];
     isLoading: LoadingObject;
     inputTags: Set<string>;
     inputTagsError: string;
@@ -29,6 +30,7 @@ const state: State = {
     phrasesList: null,
     popularTags: [],
     searchSelectedTags: [],
+    searchRecommendedTags: [],
     isLoading: { phrases: true, tags: true, inputPhrase: true },
     inputTags: new Set(),
     inputTagsError: '',
@@ -44,6 +46,7 @@ const getters = {
     sortingOption: (state: State) => state.sortingOption,
     popularTags: (state: State) => state.popularTags,
     searchSelectedTags: (state: State) => state.searchSelectedTags,
+    searchRecommendedTags: (state: State) => state.searchRecommendedTags,
     isLoading: (state: State) => state.isLoading,
     inputTagsError: (state: State) => state.inputTagsError,
     inputMeaningsErrors: (state: State) => state.inputMeaningsErrors,
@@ -72,13 +75,19 @@ const mutations = {
     removeSearchSelectedTag(state: State, tag :TagObject){
         state.searchSelectedTags = state.searchSelectedTags.filter(selectedtag => selectedtag.id !== tag.id)
     },
+    setSearchRecommendedTags(state: State, tags :TagObject[]){
+        state.searchRecommendedTags = tags;
+    }
 }
 
 const actions = {
     async UserPageLoadAllInfo({ dispatch }: { dispatch: any }) {
         await Promise.all([dispatch('GetPopularTags'), dispatch('GetPhrasesInfo')])
     },
-
+    async GetSearchRecommendedTags({commit }: {commit: any}, searchText: string){
+        //Api request for tags
+        commit('setSearchRecommendedTags', exampleTags)
+    },
     async GetPopularTags({ commit }: { commit: any }) {
         commit('setLoading', { whichLoading: 'tags', newLoading: true })
         // try {

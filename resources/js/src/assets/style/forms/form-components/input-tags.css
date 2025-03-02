@@ -60,3 +60,34 @@
     padding-bottom: 2.2px;
     background-color: #FF7878;
 }
+
+.tag-search-input-area{
+    position: relative;
+
+}
+
+.tag-selector-list{
+    position: absolute;
+    padding: 10px;
+    margin: 0;
+    width: 300px;
+    max-height: 100px;
+    overflow-y: scroll;
+    top:0;
+    transform: translate(-320px);
+    border-radius: var(--default-border-radius);
+    background-color: var(--light-background-color);
+    border-width: 1px;
+    box-shadow: var(--default-shadow);
+    border-color: var(--border-color);
+    border-style: solid;
+    list-style: none;
+}
+
+.tag-selector-list-element{
+    display: flex;
+    background-color: var(--light-background-color);
+    padding: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+}
