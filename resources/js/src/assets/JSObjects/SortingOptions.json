@@ -1,0 +1,22 @@
+[
+    {
+        "displayName": "Самые новые",
+        "name": "newest",
+        "icon": "sort-icon.svg"
+    },
+    {
+        "displayName": "Самые старые",
+        "name": "oldest",
+        "icon": "sort-icon.svg"
+    },
+    {
+        "displayName": "А-Я",
+        "name": "alphabetic",
+        "icon": "sort-icon.svg"
+    },
+    {
+        "displayName": "Я-А",
+        "name": "alphabetic-reverse",
+        "icon": "sort-icon.svg"
+    }
+]

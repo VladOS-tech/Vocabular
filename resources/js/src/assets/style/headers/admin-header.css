@@ -1,0 +1,37 @@
+.light-header-colors{
+    background-image: var(--header-gradient);
+}
+
+.header-class{
+    top: 0;
+    display: flex;
+    position: sticky;
+    /* width: calc(100%-100px); */
+    padding: 10.5px 50px 10.5px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 50px;
+    min-height: 32px;
+    box-shadow: var(--default-shadow);
+    z-index: 10;
+}
+
+.header-name-block{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-name{
+    font-family: var(--default-font-family);
+    font-weight: 500;
+    font-style: normal;
+    font-size: 16px;
+    margin: 0;
+}
+
+.logout-button{
+    background-color: #FF3D3D;
+}

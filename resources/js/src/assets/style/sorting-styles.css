@@ -1,0 +1,59 @@
+/* sort button height = 23px */
+.sort-button-container-light{
+    color: black;
+}
+
+.sort-button-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 23px;
+}
+
+.sort-button{
+    column-gap: 7px;
+    padding: 2px 5px 2px 5px;
+    user-select: none;
+    flex-shrink: 0;
+    position: relative;
+    background-color: var(--light-background-color);
+}
+
+.sort-button:hover{
+    cursor: pointer;
+    filter: brightness(90%);
+    transition: var(--default-transition-speed);
+}   
+/* 
+.sort-button:hover:before{
+    transition: var(--default-transition-speed);
+    opacity: .1;
+} */
+
+.sort-button img{
+    width: 20px;
+}
+
+.sort-options-panel-light{
+    background-color: var(--light-background-color);
+}
+
+.sort-options-panel{
+    box-shadow: var(--default-shadow);
+    border-radius: var(--default-border-radius);
+    row-gap: 5px;
+    padding: 5px;
+    width: calc(100% - 10px);
+    display: flex;
+    flex-direction: column;
+}
+
+.sort-options-hover-area{
+    min-width: calc(100% + 10px);
+    flex-wrap: wrap;
+    padding: 24px 0px 0 0px;
+    margin: -24px 0px 0 -5px;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}

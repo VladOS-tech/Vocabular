@@ -1,0 +1,12 @@
+.moder-phrase-button{
+    display: flex;
+    gap: 10px
+}
+
+.remove-phrase-button{
+    background-color: #FF3D3D;
+}
+
+.edit-phrase-button{
+    background-color: var(--button-color);
+}

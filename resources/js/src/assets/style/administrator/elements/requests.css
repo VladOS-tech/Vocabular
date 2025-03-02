@@ -1,0 +1,41 @@
+.request-block{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.request-date-light{
+    color: var(--light-date-color);
+}
+
+.request-date{
+    font-size: 20px;
+    margin: 0;
+}
+
+.request-item-light{
+    background: var(--block-background-gradient);
+    color: black;
+}
+
+.request-item{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: var(--default-border-radius);
+    border-style: solid;
+    border-width: 0px;
+    border-color: var(--border-color);
+    padding: 10px;
+    box-shadow: var(--default-shadow);
+    animation: var(--default-appear-animation);
+}
+
+.review-button-container{
+    width: 160px;
+}
+
+.review-button{
+    background-color: var(--button-color);
+}
