@@ -9,13 +9,35 @@ use Illuminate\Http\Request;
 
 class ModeratorPhraseologyController extends Controller
 {
-    // Просмотр всех фразеологизмов (подтверждённых и неподтверждённых)
     public function index()
     {
-        $phraseologies = Phraseology::all();
-        $tags = Tag::all();
+        // Получаем все фразеологизмы со статусом 'pending' и загружаем связанные теги и контексты
+        $phraseologies = Phraseology::where('status', 'pending')
+            ->with('tags', 'contexts')
+            ->get()
+            ->map(function ($phraseology) {
+                return [
+                    'id' => $phraseology->id,
+                    'date' => $phraseology->confirmed_at ?? $phraseology->updated_at,
+                    'phrase' => $phraseology->content,
+                    'tags' => $phraseology->tags->map(fn($tag) => [
+                        'id' => $tag->id,
+                        'content' => $tag->content
+                    ]),
+                    'meanings' => [
+                        [
+                            'meaning' => $phraseology->meaning,
+                            'example' => $phraseology->contexts->pluck('content')->join('; ')
+                        ]
+                    ],
+                    'contexts' => $phraseology->contexts->map(fn($context) => [
+                        'id' => $context->id,
+                        'content' => $context->content
+                    ])
+                ];
+            });
 
-        return view('moderator.phraseologies', compact('phraseologies', 'tags'));
+        return response()->json($phraseologies);
     }
     
     // Просмотр конкретного фразеологизма (без ограничений)

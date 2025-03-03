@@ -88,28 +88,79 @@ class PublicPhraseologyController extends Controller
     }
 
 
-    // Обновление существующего фразеологизма
-    public function update(Request $request, $id)
+    public function searchByContent(Request $request)
     {
-        $validated = $request->validate([
-            'content' => 'nullable|string',
-            'meaning' => 'nullable|string',
-            'status' => 'nullable|string',
-            'moderator_id' => 'nullable|exists:moderators,id',
-            'confirmed_at' => 'nullable|date',
-        ]);
+        $query = $request->query('query'); 
+    
+        if (!$query) {
+            return response()->json(['error' => 'Параметр query обязателен'], 400);
+        }
+    
+        $phraseologies = Phraseology::where('content', 'ILIKE', '%' . $query . '%')
+            ->where('status', 'approved')
+            ->with('tags', 'contexts')
+            ->get()
+            ->map(function ($phraseology) {
+                return [
+                    'id' => $phraseology->id,
+                    'date' => $phraseology->confirmed_at ?? $phraseology->updated_at,
+                    'phrase' => $phraseology->content,
+                    'tags' => $phraseology->tags->map(fn($tag) => [
+                        'id' => $tag->id,
+                        'content' => $tag->content
+                    ]),
+                    'meanings' => [
+                        [
+                            'meaning' => $phraseology->meaning,
+                            'example' => $phraseology->contexts->pluck('content')->join('; ')
+                        ]
+                    ],
+                    'contexts' => $phraseology->contexts->map(fn($context) => [
+                        'id' => $context->id,
+                        'content' => $context->content
+                    ])
+                ];
+            });
+    
+        return response()->json($phraseologies);
+    }
+    
 
-        $phraseology = Phraseology::findOrFail($id);
-        $phraseology->update($validated);
-        return response()->json($phraseology);
+    public function filterByTags(Request $request)
+    {
+        $tagIds = $request->query('tags');
+
+        $phraseologies = Phraseology::whereHas('tags', function ($query) use ($tagIds) {
+                $query->whereIn('tags.id', $tagIds);
+            })
+            ->where('status', 'approved')
+            ->with('tags', 'contexts')
+            ->get()
+            ->map(function ($phraseology) {
+                return [
+                    'id' => $phraseology->id,
+                    'date' => $phraseology->confirmed_at ?? $phraseology->updated_at,
+                    'phrase' => $phraseology->content,
+                    'tags' => $phraseology->tags->map(fn($tag) => [
+                        'id' => $tag->id,
+                        'content' => $tag->content
+                    ]),
+                    'meanings' => [
+                        [
+                            'meaning' => $phraseology->meaning,
+                            'example' => $phraseology->contexts->pluck('content')->join('; ')
+                        ]
+                    ],
+                    'contexts' => $phraseology->contexts->map(fn($context) => [
+                        'id' => $context->id,
+                        'content' => $context->content
+                    ])
+                ];
+            });
+
+        return response()->json($phraseologies);
     }
 
-    // Удаление фразеологизма
-    public function destroy($id)
-    {
-        $phraseology = Phraseology::findOrFail($id);
-        $phraseology->delete();
-        return response()->noContent();
-    }
+
 }
 
