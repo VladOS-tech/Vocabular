@@ -12,9 +12,8 @@ interface State {
     isMobile: boolean;
     sortingOption: string;
     phrasesList: PhraseObject[] | null;
-    popularTags: TagObject[] | null;
+    availableTags: TagObject[];
     searchSelectedTags: TagObject[];
-    searchRecommendedTags: TagObject[];
     isLoading: LoadingObject;
     inputTags: Set<string>;
     inputTagsError: string;
@@ -28,9 +27,8 @@ const state: State = {
     isMobile: false,
     sortingOption: '',
     phrasesList: null,
-    popularTags: [],
+    availableTags: [],
     searchSelectedTags: [],
-    searchRecommendedTags: [],
     isLoading: { phrases: true, tags: true, inputPhrase: true },
     inputTags: new Set(),
     inputTagsError: '',
@@ -44,9 +42,12 @@ const getters = {
     isMobile: (state: State) => state.isMobile,
     phrasesList: (state: State) => state.phrasesList,
     sortingOption: (state: State) => state.sortingOption,
-    popularTags: (state: State) => state.popularTags,
+    popularTags: (state: State) => {
+        console.log(state.availableTags)
+        return state.availableTags.sort((tag) => tag.timesUsed)
+    },
+    availableTags: (state: State) => state.availableTags,
     searchSelectedTags: (state: State) => state.searchSelectedTags,
-    searchRecommendedTags: (state: State) => state.searchRecommendedTags,
     isLoading: (state: State) => state.isLoading,
     inputTagsError: (state: State) => state.inputTagsError,
     inputMeaningsErrors: (state: State) => state.inputMeaningsErrors,
@@ -63,8 +64,8 @@ const mutations = {
     setLoading(state: State, { whichLoading, newLoading }: { whichLoading: keyof LoadingObject, newLoading: boolean }) {
         state.isLoading[whichLoading] = newLoading
     },
-    setPopularTags(state: State, tags :TagObject[]){
-        state.popularTags = tags;
+    setAvailableTags(state: State, tags :TagObject[]){
+        state.availableTags = tags;
     },
     setSearchSelectedTags(state: State, tags :TagObject[]){
         state.searchSelectedTags = tags;
@@ -75,20 +76,20 @@ const mutations = {
     removeSearchSelectedTag(state: State, tag :TagObject){
         state.searchSelectedTags = state.searchSelectedTags.filter(selectedtag => selectedtag.id !== tag.id)
     },
-    setSearchRecommendedTags(state: State, tags :TagObject[]){
-        state.searchRecommendedTags = tags;
-    }
+    // setSearchRecommendedTags(state: State, tags :TagObject[]){
+    //     state.searchRecommendedTags = tags;
+    // }
 }
 
 const actions = {
     async UserPageLoadAllInfo({ dispatch }: { dispatch: any }) {
-        await Promise.all([dispatch('GetPopularTags'), dispatch('GetPhrasesInfo')])
+        await Promise.all([dispatch('GetTags'), dispatch('GetPhrasesInfo')])
     },
     async GetSearchRecommendedTags({commit }: {commit: any}, searchText: string){
         //Api request for tags
         commit('setSearchRecommendedTags', exampleTags)
     },
-    async GetPopularTags({ commit }: { commit: any }) {
+    async GetTags({ commit }: { commit: any }) {
         commit('setLoading', { whichLoading: 'tags', newLoading: true })
         // try {
         //     const { data } = await axios.get('http://127.0.0.1:8000/api/tags')
@@ -96,7 +97,7 @@ const actions = {
         // } catch (error) {
         //     console.error('Ошибка при загрузке тегов:', error)
         // } finally {
-            commit('setPopularTags', {tags: exampleTags})
+            commit('setAvailableTags', exampleTags)
             commit('setLoading', { whichLoading: 'tags', newLoading: false })
         // }
     },
