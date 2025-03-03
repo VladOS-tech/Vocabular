@@ -3,50 +3,83 @@
         <h3>
             Теги:
         </h3>
-        <div class="tag-input-wrapper" @click="($refs.tagField as HTMLInputElement).focus">
-            <div class="tag tag-generic tag-editable" @click.stop v-for="tag in tags" :key="tag">
-                {{ tag }}
-                <button class="button remove-tag-button" @click="removeTag(tag)">
+        <div class="tag-search-input-area">
+            <input type="text" class="input-field input-field-regular" v-model="tagSearch" ref="tagSearchInputField" placeholder="Начните вводить тег..." @input="toggleTagSelector" @keyup="closeTagSelector">
+            <ul class="form-tag-selector-list" v-if="showTagSelector">
+                <li class="tag-selector-list-element button" v-for="tag in unselectedRecommendedTags" :key="tag.id" @click="selectTag(tag); selectTagViaSearch();">
+                    <div class="tag-search-inline">
+                    {{ tag.name }}
+                    </div>
+                    <div class="tag-search-inline">
+                        {{ tag.timesUsed }}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div v-if="searchSelectedTags.length > 0" class="tags-block">
+            <div class="tag tag-generic tag-editable" @click.stop v-for="tag in searchSelectedTags" :key="tag.id">
+                {{ tag.name }}
+                <button class="button remove-tag-button" @click="unselectTag(tag)">
                     x
                 </button>
             </div>
-            <div contenteditable class="tag-hidden-input" type="text" ref="tagField" @input="checkTags">{{ tagInput }}</div>
+            
         </div>
     </div>
 </template>
 
 <script lang="ts">
     import { defineComponent } from 'vue';
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
+import TagObject from '@/assets/interfaces/TagObject';
 
     export default defineComponent({
         data(){
             return{
-                tagInput: '' as string,
-                tags: new Set<string>()
+                tagSearch: '' as string,
+                showTagSelector: false as boolean
+            }
+        },
+        computed:{
+            ...mapGetters(['searchSelectedTags', 'searchRecommendedTags']),
+            unselectedRecommendedTags(): TagObject[]{
+                return (this.searchRecommendedTags || []).filter((tag: TagObject) => !(this.searchSelectedTags || []).some((selectedTag: TagObject) => selectedTag.id === tag.id))
             }
         },
         methods:{
-            ...mapMutations(['setInputTags', 'setInputTagsError']),
-            checkTags(e: Event){
-                this.tagInput = (e.target as HTMLElement)?.innerText;
-                console.log(this.tagInput.split(',')[0].trim())
-                if(this.tagInput.indexOf(',') !== -1){
-                    const newTag = this.tagInput.split(',')[0].trim();
-                    if(newTag.length !== 0) {
-                        this.tags.add(newTag);
-                        this.setInputTags(this.tags)
-                    }
-                    this.tagInput = '';
-                    (e.target as HTMLElement).innerText = ''
+            ...mapActions(['GetPhrasesInfo', 'GetSearchRecommendedTags']),
+            ...mapMutations(['setSearchSelectedTags', 'addSearchSelectedTag', 'removeSearchSelectedTag']),
+            selectTag(tag: TagObject){
+                this.addSearchSelectedTag(tag)
+            },
+            selectTagViaSearch(){
+                (this.$refs.tagSearchInputField as HTMLInputElement).blur()
+                this.tagSearch = ''
+                this.showTagSelector = false;
+            },
+            unselectTag(tag: TagObject){
+                this.removeSearchSelectedTag(tag)
+            },
+            async toggleTagSelector(){
+                if(this.tagSearch.length >= 3){
+                    await this.GetSearchRecommendedTags(this.tagSearch)
+                    if(this.unselectedRecommendedTags.length > 0) this.showTagSelector = true;
+                }else{
+                    this.showTagSelector = false;
                 }
             },
-            removeTag(tag: string){
-                this.tags.delete(tag)
-                this.setInputTags(this.tags)
-            },
-            beforeMount() {
-                this.setInputTags([])
+            closeTagSelector(e: KeyboardEvent){
+                if(e.key === 'Enter' || e.key === 'Escape'){
+                    if(e.key == 'Enter'){
+                    let firstTag = this.unselectedRecommendedTags[0]
+                    if (firstTag) {
+                        this.selectTag(firstTag)
+                    }
+                }
+                (e.target as HTMLInputElement).blur()
+                this.tagSearch = ''
+                this.showTagSelector = false;
+                }
             }
         }
     })

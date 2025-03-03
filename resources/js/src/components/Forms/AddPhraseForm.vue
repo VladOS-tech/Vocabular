@@ -12,15 +12,8 @@
         </textarea>
         <div class="input-error">
             {{ inputPhraseError }}
-        </div>
-
-        <label for="tags">Выберите теги:</label>
-        <select id="tags" v-model="selectedTags" multiple>
-            <option v-for="tag in tagsList" :key="tag.id" :value="tag.id">
-                {{ tag.content }}
-            </option>
-        </select>
-
+        </div>  
+        <InputTags/>
         <div class="input-error">
             {{ inputTagsError }}
         </div>
@@ -44,9 +37,10 @@
 import { defineComponent, ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import inputMeanings from './FormComponents/InputMeanings.vue';
+import InputTags from './FormComponents/InputTags.vue';
 
 export default defineComponent({
-    components: { inputMeanings },
+    components: { inputMeanings, InputTags },
     setup() {
         const store = useStore();
         const inputPhrase = ref('');

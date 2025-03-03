@@ -17,6 +17,7 @@
     gap: 10px;
     flex-wrap: wrap;
     box-sizing: border-box;
+    
 }
 
 .tag-input-wrapper:hover{
@@ -82,6 +83,26 @@
     border-color: var(--border-color);
     border-style: solid;
     list-style: none;
+}
+
+.form-tag-selector-list{
+    position: absolute;
+    padding: 10px;
+    margin: 0;
+    width: 300px;
+    max-height: 100px;
+    overflow-y: scroll;
+    top:0;
+    transform: translateY(30px);
+    border-radius: var(--default-border-radius);
+    background-color: var(--light-background-color);
+    border-width: 1px;
+    box-shadow: var(--default-shadow);
+    border-color: var(--border-color);
+    border-style: solid;
+    list-style: none;
+    z-index: 1;
+    opacity: .2;
 }
 
 .tag-selector-list-element{
