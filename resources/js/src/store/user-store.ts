@@ -11,6 +11,7 @@ import exampleTags from "@/assets/JSObjects/ExampleTags.json"
 interface State {
     isMobile: boolean;
     sortingOption: string;
+    searchRequest: string;
     phrasesList: PhraseObject[] | null;
     availableTags: TagObject[];
     searchSelectedTags: TagObject[];
@@ -26,6 +27,7 @@ interface State {
 const state: State = {
     isMobile: false,
     sortingOption: '',
+    searchRequest: '',
     phrasesList: null,
     availableTags: [],
     searchSelectedTags: [],
@@ -42,6 +44,7 @@ const getters = {
     isMobile: (state: State) => state.isMobile,
     phrasesList: (state: State) => state.phrasesList,
     sortingOption: (state: State) => state.sortingOption,
+    searchRequest: (state: State) => state.searchRequest,
     popularTags: (state: State) => {
         console.log(state.availableTags)
         return state.availableTags.sort((tag) => tag.timesUsed)
@@ -76,6 +79,14 @@ const mutations = {
     removeSearchSelectedTag(state: State, tag :TagObject){
         state.searchSelectedTags = state.searchSelectedTags.filter(selectedtag => selectedtag.id !== tag.id)
     },
+    setSortingOption(state: State, sortingOption :string){
+        console.log(sortingOption)
+        state.sortingOption = sortingOption;
+    },
+    setSearchRequest(state: State, searchRequest :string){
+        console.log(searchRequest)
+        state.searchRequest = searchRequest
+    }
     // setSearchRecommendedTags(state: State, tags :TagObject[]){
     //     state.searchRecommendedTags = tags;
     // }

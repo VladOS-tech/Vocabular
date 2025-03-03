@@ -5,8 +5,8 @@
                 {{ pageName }}
             </h1>
         </router-link>
-        <form action="-IDK-" class="search-block" :class="{'mobile-search-block-active': isMobile && isSearchActive, 'search-block-inactive-mobile': !isSearchActive || !isMobile}">
-            <input id="search-field-id" type="text" class="user-search-field user-search-field-light" placeholder="Поиск" v-model="searchInput" @keypress.enter="SearchPhrasesInBd(searchInput); GetPhrasesInfo()" @focus="isSearchActive = true" @blur="isSearchActive = false"/>
+        <form class="search-block" :class="{'mobile-search-block-active': isMobile && isSearchActive, 'search-block-inactive-mobile': !isSearchActive || !isMobile}">
+            <input id="search-field-id" type="text" class="user-search-field user-search-field-light" placeholder="Поиск" v-model="searchInput" @keypress.enter="search" @focus="isSearchActive = true" @blur="isSearchActive = false"/>
             <label for="search-field-id">
                 <img src="@/assets/images/icons/search-icon.svg" alt="search-icon" class="search-icon-header search-icon-header-light">
             </label>
@@ -19,7 +19,7 @@
 
 <script lang="ts">
     import { defineComponent } from 'vue';
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapGetters, mapActions, mapMutations } from 'vuex';
 
     export default defineComponent({
         data(){
@@ -32,7 +32,13 @@
             ...mapGetters(['pageName', 'isMobile'])
         },
         methods:{
-            ...mapActions(['SearchPhrasesInBd', 'GetPhrasesInfo'])
+            ...mapMutations(['setSearchRequest']),
+            ...mapActions(['SearchPhrasesInBd', 'GetPhrasesInfo']),
+            search(e: Event){
+                e.preventDefault()
+                this.setSearchRequest(this.searchInput)
+                this.GetPhrasesInfo()
+            }
         }
     }) 
 </script>
