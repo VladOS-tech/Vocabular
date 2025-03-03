@@ -13,15 +13,36 @@ use Inertia\Response;
 class PublicPhraseologyController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $phraseologies = Phraseology::where('status', 'pending')
-            ->with('tags', 'contexts')
+        $sort = $request->query('sort', 'newest'); 
+
+        $query = Phraseology::query();
+
+        $query->where('status', 'approved');
+
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'alphabetic':
+                $query->orderBy('content', 'asc'); 
+                break;
+            case 'alphabetic-reverse':
+                $query->orderBy('content', 'desc'); 
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $phraseologies = $query->with('tags', 'contexts')
             ->get()
             ->map(function ($phraseology) {
                 return [
                     'id' => $phraseology->id,
-                    'date' => $phraseology->confirmed_at ?? $phraseology->updated_at,
+                    'date' => $phraseology->created_at,  
                     'phrase' => $phraseology->content,
                     'tags' => $phraseology->tags->map(fn($tag) => [
                         'id' => $tag->id,
@@ -31,7 +52,7 @@ class PublicPhraseologyController extends Controller
                         [
                             'meaning' => $phraseology->meaning,
                             'example' => $phraseology->contexts->pluck('content')->join('; ')
-                            ]
+                        ]
                     ],
                     'contexts' => $phraseology->contexts->map(fn($context) => [
                         'id' => $context->id,
@@ -42,6 +63,7 @@ class PublicPhraseologyController extends Controller
 
         return response()->json($phraseologies);
     }
+
 
     
     // Просмотр конкретного фразеологизма
