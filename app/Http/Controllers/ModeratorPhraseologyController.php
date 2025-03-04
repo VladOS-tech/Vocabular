@@ -11,7 +11,6 @@ class ModeratorPhraseologyController extends Controller
 {
     public function index()
     {
-        // Получаем все фразеологизмы со статусом 'pending' и загружаем связанные теги и контексты
         $phraseologies = Phraseology::where('status', 'pending')
             ->with('tags', 'contexts')
             ->get()
@@ -86,7 +85,7 @@ class ModeratorPhraseologyController extends Controller
             return response()->json(['message' => 'Фразеологизм уже обработан'], 400);
         }
 
-        $phraseology->update(['status' => 'confirmed']);
+        $phraseology->update(['status' => 'approved']);
 
         return response()->json([
             'message' => 'Фразеологизм подтверждён!',
@@ -113,7 +112,7 @@ class ModeratorPhraseologyController extends Controller
     {
         $phraseology = Phraseology::findOrFail($id);
 
-        if ($phraseology->status !== 'confirmed') {
+        if ($phraseology->status !== 'approved') {
             return response()->json(['message' => 'Только подтверждённые фразеологизмы могут быть отправлены на удаление'], 400);
         }
 
